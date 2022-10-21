@@ -55,13 +55,19 @@ int eval_prefix(char *prefix) {
             case '%': 
                 push(&s, op1 % op2);
                 break;
+            case '/': 
+                push(&s, op1 / op2);
             default:
                 break;
             }
         }
     }
+    int ans = pop(&s);
 
-    return pop(&s);
+    free(s.arr);
+    free(prefix);
+
+    return ans;
 }
 
 int pop(stack* s) {
@@ -77,8 +83,7 @@ void push(stack* s, int ele) {
 
 char* string_reverse(char *str) {
     int len = strlen(str);
-    char *rev = (char *) calloc(strlen(str), sizeof(char));
-    char temp;
+    char *rev = (char *) calloc(strlen(str)+1, sizeof(char));
     for(int i=0; i < len; i++) {
         rev[i] = str[len-1-i];
     }
