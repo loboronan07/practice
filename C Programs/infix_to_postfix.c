@@ -23,6 +23,7 @@ int main() {
 
     printf("Postfix Expression Generated: %s", postfix);
 
+    free(postfix);
     return 0;
 }
 
@@ -52,6 +53,7 @@ char* infix_to_postfix(char *infix) {
     for(char op = pop(&s); op != '\0'; op = pop(&s)) 
         postfix[++postfix_index]  = op;
 
+    free(s.arr);
     return postfix;
 }
 
@@ -72,6 +74,7 @@ int check_operator(char inp) {
         case '-':
         case '*':
         case '/':
+        case '%':
         case '(':
         case ')':
             return 1;
