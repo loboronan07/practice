@@ -31,24 +31,25 @@ int main(void) {
 
 
 char* prefix_to_postfix(char* prefix) {
-    stack *s = (stack*) malloc(sizeof(stack));
-    s->arr = (char**) calloc(strlen(prefix), sizeof(char*));
+    stack *s = (stack*) malloc(sizeof(stack)); 
+    s->arr = (char**) calloc(strlen(prefix), sizeof(char*)); 
     s->tos = -1;
-    char *prefix_r = string_reverse(prefix);
-    char curr, *op1, *op2;
+    char *prefix_r = string_reverse(prefix); 
+    char curr, *op1, *op2, *con;
     char operator[2] = {}, operand[2] = {};
-    char null[1] = {};
     for(int index = 0; prefix_r[index] !='\0'; index++) {
         curr = prefix_r[index];
         if(!check_operator(curr)) {
             operand[0] = curr;
-            push(s, operand);
+            push(s, operand); 
         }
         else {
             op1 = pop(s);
             op2 = pop(s);
             operator[0] = curr;
-            push(s, concat(op1, op2, operator));
+            con = concat(op1, op2, operator);
+            push(s, con);
+            free(con);
             free(op1);
             free(op2);
         }
@@ -56,7 +57,7 @@ char* prefix_to_postfix(char* prefix) {
 
     char *postfix = pop(s);
 
-    free(prefix_r);
+    free(prefix_r); 
     free_stack(s);
 
     return postfix;
@@ -89,8 +90,11 @@ char* pop(stack* s) {
     if(s->tos == -1) {
         return NULL;
     }
-    char *popped = s->arr[(s->tos)];
-    s->arr[(s->tos)--] = NULL;
+    char *popped = (char *) calloc(strlen(s->arr[s->tos]) + 1, sizeof(char));
+    strcpy(popped, s->arr[s->tos]);
+    free(s->arr[s->tos]);
+    s->arr[s->tos] = NULL;
+    s->tos--;
     return popped;
 }
 
@@ -102,7 +106,7 @@ void push(stack* s, char *ele) {
 
 char* concat(char *a, char *b, char *c) {
     char *res = (char*) calloc(strlen(a) + strlen(b) + strlen(c) + 1, sizeof(char));
-    int index=0;
+    int index = 0;
     for(int i=0; a[i] != '\0'; i++, index++) 
         res[index] = a[i];
     for(int i=0; b[i] != '\0'; i++, index++) 
@@ -114,6 +118,6 @@ char* concat(char *a, char *b, char *c) {
 }
 
 void free_stack(stack* s) {
-    free(s->arr);
-    free(s);
+    free(s->arr); 
+    free(s); 
 }
